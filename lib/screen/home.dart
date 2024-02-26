@@ -3,12 +3,13 @@ import 'package:agriculture_web/repository/main_dashboard_model.dart';
 import 'package:agriculture_web/responsive/responsiveness.dart';
 import 'package:agriculture_web/screen/login_page.dart';
 import 'package:agriculture_web/theme/theme_colors.dart';
-import 'package:agriculture_web/widget/debugging.dart';
 import 'package:agriculture_web/widget/navigate_route.dart';
 import 'package:agriculture_web/widget/snack_bar_message.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -66,35 +67,34 @@ class _SmallScreen extends StatefulWidget {
 }
 
 class _SmallScreenState extends State<_SmallScreen> {
-  late Future<void> _userDataFuture;
-
-  @override
-  void initState() {
-    _userDataFuture = _getData();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: _userDataFuture,
-      builder: (context, AsyncSnapshot<void> snapshot) {
+    const String apiUrl =
+        'https://thingspeak.com/channels/1986745/feed.json?api_key=LLOGFGBE7MQYGUO7&results=10';
+
+    return FutureBuilder(
+      future: fetchData(apiUrl),
+      builder: (context, AsyncSnapshot<MainDashBoardModel?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Center(
-            child: Text('Error: ${snapshot.error}'),
+            child: Text(
+              'Error: ${snapshot.error}',
+              style: const TextStyle(color: Colors.white),
+            ),
           );
         } else {
-          return const SizedBox.expand(
+          return SizedBox.expand(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _CustomText(),
-                _MiddleBar(),
-                _SensorHeading(),
-                CustomTable(),
-                _BottomBar(),
+                const _CustomText(),
+                const _MiddleBar(),
+                const _SensorHeading(),
+                CustomTable(
+                    dashBoardModel: snapshot.data ?? MainDashBoardModel()),
+                const _BottomBar(),
               ],
             ),
           );
@@ -103,7 +103,17 @@ class _SmallScreenState extends State<_SmallScreen> {
     );
   }
 
-  Future<MainDashBoardModel?> _getData1() async {
+  Future<MainDashBoardModel> fetchData(String apiUrl) async {
+    var response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load data from API');
+    }
+  }
+
+  Future<MainDashBoardModel?> _getData() async {
     try {
       MainDashBoardModel mainDashBoardModel =
           await UserRepository().userLogin();
@@ -116,18 +126,6 @@ class _SmallScreenState extends State<_SmallScreen> {
       }
     }
     return null;
-  }
-
-  Future<void> _getData() async {
-    try {
-      await Future.wait(
-        [
-          _getData1(),
-        ],
-      );
-    } catch (e) {
-      Debugging.printing(text: 'Error fetching data: $e');
-    }
   }
 }
 
@@ -258,8 +256,8 @@ class _CustomText extends StatelessWidget {
 }
 
 class CustomTable extends StatelessWidget {
-  const CustomTable({super.key});
-
+  const CustomTable({super.key, required this.dashBoardModel});
+  final MainDashBoardModel dashBoardModel;
   @override
   Widget build(BuildContext context) {
     return SizedBox(

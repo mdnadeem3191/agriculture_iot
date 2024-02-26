@@ -19,9 +19,15 @@ class _ApiProvider implements ApiProvider {
   String? baseUrl;
 
   @override
-  Future<MainDashBoardModel> getDashBoardData() async {
+  Future<MainDashBoardModel> getDashBoardData(
+    String apiKey,
+    String result,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'api_key': apiKey,
+      r'results': result,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -32,7 +38,7 @@ class _ApiProvider implements ApiProvider {
     )
             .compose(
               _dio.options,
-              '1986745/feed.json?api_key=LLOGFGBE7MQYGUO7',
+              'channels/1986745/feed.json',
               queryParameters: queryParameters,
               data: _data,
             )
