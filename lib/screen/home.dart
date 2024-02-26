@@ -1,5 +1,7 @@
 import 'package:agriculture_web/responsive/responsiveness.dart';
+import 'package:agriculture_web/screen/login_page.dart';
 import 'package:agriculture_web/theme/theme_colors.dart';
+import 'package:agriculture_web/widget/navigate_route.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
@@ -134,15 +136,29 @@ class _MiddleBar extends StatelessWidget {
             children: List.generate(
           5,
           (index) => Expanded(
-              child: Center(
-            child: Text(
-              itemList[index],
-              style: const TextStyle(color: Colors.white, fontSize: 18),
+              child: GestureDetector(
+            onTap: () => _onTap(index, context),
+            child: Center(
+              child: Text(
+                itemList[index],
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
             ),
           )),
         )),
       ),
     );
+  }
+
+  void _onTap(int index, BuildContext context) {
+    if (index == 0) {
+    } else if (index == 1) {
+    } else if (index == 2) {
+    } else if (index == 3) {
+    } else {
+      NavigatePageRoute().navigatePushAndRemoveUntil(
+          context: context, widget: const LoginPage());
+    }
   }
 }
 
@@ -153,7 +169,7 @@ class _SensorHeading extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration:
-          BoxDecoration(color: ThemeColors.customSteelColor.withOpacity(0.4)),
+          BoxDecoration(color: ThemeColors.customZincColor.withOpacity(0.5)),
       child: const SizedBox(
         child: SizedBox(
           height: 50,

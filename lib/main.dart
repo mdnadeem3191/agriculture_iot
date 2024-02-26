@@ -1,4 +1,3 @@
-import 'package:agriculture_web/screen/home.dart';
 import 'package:agriculture_web/screen/login_page.dart';
 import 'package:agriculture_web/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +22,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: themeColors.themeColorCustom,
           primaryColor: themeColors.themeColorCustom[800],
         ),
-        home: LoginPage()
-        //  const Dashboard()
-        );
+        home: const LoginPage());
   }
 }
