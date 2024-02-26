@@ -12,12 +12,32 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xfff2f3f5),
-      body: ResponsiveWidget(
-        largeScreen: _SmallScreen(),
-        mediumScreen: _SmallScreen(),
-        smallScreen: _SmallScreen(),
+    return Scaffold(
+      backgroundColor: const Color(0xfff2f3f5),
+      body: Stack(
+        children: [
+          SizedBox.expand(
+            child: DecoratedBox(
+              decoration: const BoxDecoration(),
+              child: Image.asset(
+                "assets/soil.webp",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SizedBox.expand(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.3),
+              ),
+            ),
+          ),
+          const ResponsiveWidget(
+            largeScreen: _SmallScreen(),
+            mediumScreen: _SmallScreen(),
+            smallScreen: _SmallScreen(),
+          ),
+        ],
       ),
     );
   }
@@ -45,7 +65,14 @@ class _SmallScreenState extends State<_SmallScreen> {
         } else {
           return const SizedBox.expand(
             child: CustomScrollAble(
-              child: Text("data"),
+              child: Text(
+                "Iot Based Agriculture Monitoring System",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+              ),
             ),
           );
         }
