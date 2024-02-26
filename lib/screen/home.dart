@@ -1,7 +1,12 @@
+import 'package:agriculture_web/api/api_provider.dart';
+import 'package:agriculture_web/repository/main_dashboard_model.dart';
 import 'package:agriculture_web/responsive/responsiveness.dart';
 import 'package:agriculture_web/screen/login_page.dart';
 import 'package:agriculture_web/theme/theme_colors.dart';
+import 'package:agriculture_web/widget/debugging.dart';
 import 'package:agriculture_web/widget/navigate_route.dart';
+import 'package:agriculture_web/widget/snack_bar_message.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
@@ -61,10 +66,18 @@ class _SmallScreen extends StatefulWidget {
 }
 
 class _SmallScreenState extends State<_SmallScreen> {
+  late Future<void> _userDataFuture;
+
+  @override
+  void initState() {
+    _userDataFuture = _getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-      future: _getData(),
+      future: _userDataFuture,
       builder: (context, AsyncSnapshot<void> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -90,7 +103,32 @@ class _SmallScreenState extends State<_SmallScreen> {
     );
   }
 
-  Future<void> _getData() async {}
+  Future<MainDashBoardModel?> _getData1() async {
+    try {
+      MainDashBoardModel mainDashBoardModel =
+          await UserRepository().userLogin();
+      return mainDashBoardModel;
+    } catch (e) {
+      if (e is DioException) {
+        if (!mounted) return null;
+        SnackBarMessage.show(
+            errorText: e.response?.data["message"], context: context);
+      }
+    }
+    return null;
+  }
+
+  Future<void> _getData() async {
+    try {
+      await Future.wait(
+        [
+          _getData1(),
+        ],
+      );
+    } catch (e) {
+      Debugging.printing(text: 'Error fetching data: $e');
+    }
+  }
 }
 
 class _BottomBar extends StatelessWidget {

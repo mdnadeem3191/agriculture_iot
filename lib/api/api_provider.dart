@@ -12,3 +12,12 @@ abstract class ApiProvider {
   @GET("1986745/feed.json?api_key=LLOGFGBE7MQYGUO7")
   Future<MainDashBoardModel> getDashBoardData();
 }
+
+class UserRepository {
+  late ApiProvider _apiProvider;
+  late Dio _dio;
+
+  Future<MainDashBoardModel> userLogin() async {
+    return await _apiProvider.getDashBoardData();
+  }
+}
