@@ -1,3 +1,4 @@
+import 'package:agriculture_web/repository/main_dashboard_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 part 'api_provider.g.dart';
@@ -7,4 +8,7 @@ part 'api_provider.g.dart';
 @RestApi()
 abstract class ApiProvider {
   factory ApiProvider(Dio dio, {String baseUrl}) = _ApiProvider;
+
+  @GET("1986745/feed.json?api_key=LLOGFGBE7MQYGUO7")
+  Future<MainDashBoardModel> getDashBoardData();
 }

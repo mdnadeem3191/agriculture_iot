@@ -88,8 +88,8 @@ class _RightLoginSectionState extends State<_RightLoginSection> {
           onLoginTap: () {
             if (widget.formKey.currentState != null) {
               if (widget.formKey.currentState!.validate()) {
-                if (widget._emailController.text != "mdnadeem3191@gmail.com" ||
-                    widget._passwordController.text != "844846") {
+                if (widget._emailController.text != "iot_irrigation" ||
+                    widget._passwordController.text != "12345") {
                   AlertPopUpFunction.alertPopUp(
                       "Incorrect Credential",
                       "Please enter correct email and password.",
@@ -231,14 +231,6 @@ class _LoginTextFieldAreaState extends State<_LoginTextFieldArea> {
           onValidation: (String? value) {
             if (value == null || value.isEmpty) {
               return "Please enter valid email";
-            } else if (value == "admin") {
-              return null;
-            } else if (!value.contains(
-              RegExp(
-                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-              ),
-            )) {
-              return "Please enter valid email";
             }
             return null;
           },
@@ -267,8 +259,6 @@ class _LoginTextFieldAreaState extends State<_LoginTextFieldArea> {
           onValidation: (String? value) {
             if (value == null || value.isEmpty) {
               return "Enter password";
-            } else if (value.length < 6) {
-              return "Password should be 6 digit";
             }
             return null;
           },

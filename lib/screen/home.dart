@@ -241,7 +241,7 @@ class CustomTable extends StatelessWidget {
                       isHeading: true)),
               TableCell(
                   child: _buildCell(
-                      text: 'Pressor sensor\nRange: (1008-1015hPa°)',
+                      text: 'Pressure sensor\nRange: (1008-1015hPa°)',
                       isHeading: true)),
               TableCell(
                   child: _buildCell(
